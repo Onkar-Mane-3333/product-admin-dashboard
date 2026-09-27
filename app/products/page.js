@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { getProducts } from "@/services/productService";
+import ProductTable from "@/components/ProductTable";
+import ProductCard from "@/components/ProductCard";
 
 export default function ProductsPage() {
     const [products,setProducts] = useState([]);
@@ -19,13 +21,20 @@ export default function ProductsPage() {
   return(
     <div>
         <h1>Products</h1>
+        <>
+        <div className="hidden md:block">
+            <ProductTable products={products} />
+        </div>
 
-        {products.map((product) => (
-            <div key={product.id}>
-                <h2>{product.title}</h2>
-                <p>Price: ${product.price}</p>
-            </div>
-        ))}
+        <div className="grid gap-4 px-2 md:hidden">
+            {products.map((product) => (
+            <ProductCard
+                key={product.id}
+                product={product}
+            />
+            ))}
+        </div>
+        </>
     </div>
   )
 }
