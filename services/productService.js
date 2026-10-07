@@ -7,3 +7,11 @@ export async function getProducts(limit,skip) {
 
   return response.data;
 }
+
+export async function getProductsBySearch(search){
+  const response = await api.get(
+  `/products/search?q=${search}`
+);
+
+return response.data;
+}
