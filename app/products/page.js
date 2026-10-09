@@ -17,6 +17,8 @@ export default function ProductsPage() {
     const [search , setSearch] = useState("");
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
+    const [sortBy, setSortBy] = useState("");
+    const [order, setOrder] = useState("");
     const debouncedSearch = useDebounce(search);
     const requestId = useRef(0);
     const skip = (currentPage - 1) * pageSize;
@@ -32,7 +34,7 @@ export default function ProductsPage() {
       } else if (selectedCategory !== "") {
         data = await getProductsByCategory(selectedCategory);
       } else {
-        data = await getProducts(pageSize, skip);
+        data = await getProducts(pageSize, skip,sortBy,order);
       }
 
       if (currentRequestId !== requestId.current) {
@@ -44,11 +46,11 @@ export default function ProductsPage() {
     }
 
     loadProducts();
-  }, [currentPage, pageSize, debouncedSearch,selectedCategory]);
+  }, [currentPage, pageSize, debouncedSearch,selectedCategory,sortBy,order]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [debouncedSearch, selectedCategory]);
+  }, [debouncedSearch, selectedCategory, sortBy, order]);
 
   useEffect(() => {
     async function loadCategories(){
@@ -81,6 +83,20 @@ console.log("debouncedSearch:", debouncedSearch);
               {category.name}
             </option>
           ))}
+        </select>
+
+        <select onChange={(e) => {
+          const [sortBy,order] = e.target.value.split("-");
+          setSortBy(sortBy);
+          setOrder(order);
+        }}> 
+          <option value="">None</option>
+          <option value="price-asc">Price: low - High</option>
+          <option value="price-desc">Price: High - low</option>
+          <option value="rating-asc">Rating: low - High</option>
+          <option value="rating-desc">Rating: High - low</option>
+          <option value="title-asc">Title: A -Z</option>
+          <option value="title-desc">Title: Z - A</option>
         </select>
         
         <>

@@ -1,8 +1,8 @@
 import api from "./api";
 
-export async function getProducts(limit,skip) {
+export async function getProducts(limit,skip,sortBy,order) {
   const response = await api.get(
-    `/products?limit=${limit}&skip=${skip}`
+    `/products?limit=${limit}&skip=${skip}&sortBy=${sortBy}&order=${order}`
   );
 
   return response.data;
